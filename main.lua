@@ -27,26 +27,54 @@ function love.load()
         box.f = love.physics.newFixture(static.b, static.s)
         box.f:setUserData("Block")
     daveCollider = {}
-        daveCollider.b = love.physics.newBody(world, 400,600, "dynamic")
+        daveCollider.b = love.physics.newBody(world, 400,500, "dynamic")
         daveCollider.b:setMass(10)
         daveCollider.s = love.physics.newRectangleShape(daveWidth,daveHeight)
         daveCollider.f = love.physics.newFixture(daveCollider.b, daveCollider.s)
         daveCollider.f:setRestitution(0)    -- make it bouncy
         daveCollider.f:setUserData("Dave")
 end
-
+up =false
+right = false
+left = false
 function love.update(dt)
     world:update(dt)
-    if love.keyboard.isDown("up") then
+    if up==true then
     	if touch == 1 then
     		touch = 0
-        	daveCollider.b:applyForce(0,-11000)
+        	daveCollider.b:applyForce(0,-51000)
         end
-    elseif love.keyboard.isDown("right") then
+    end
+    if right==true then
         daveCollider.b:setX(daveCollider.b:getX()+velocity*dt)
-    elseif love.keyboard.isDown("left") then
+    end
+    if left==true then
         daveCollider.b:setX(daveCollider.b:getX()-velocity*dt)
     end
+end
+
+function love.keypressed( key )
+   if key == "up" then
+      up = true
+   end
+   if key == "right" then
+      right = true
+   end
+   if key == "left" then
+      left = true
+   end
+end
+
+function love.keyreleased( key )
+      if key == "up" then
+      up = false
+   end
+   if key == "right" then
+      right = false
+   end
+   if key == "left" then
+      left = false
+   end
 end
 
 function love.draw()
@@ -62,16 +90,12 @@ function love.draw()
     end
     love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
 end
-
 function beginContact(a, b, coll)
 end
- 
 function endContact(a, b, coll)
 end
- 
 function preSolve(a, b, coll)
 end
- 
 function postSolve(a, b, coll, normalimpulse, tangentimpulse)
 	touch =1
 end
