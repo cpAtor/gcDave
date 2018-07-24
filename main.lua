@@ -60,7 +60,6 @@ function love.update(dt)
     end
 end
 function love.draw()
-    --love.graphics.polygon("line", daveCollider.b:getWorldPoints(daveCollider.s:getPoints()))
     love.graphics.draw(davePic, daveCollider.b:getX()-daveWidth/2,daveCollider.b:getY()-daveHeight/2, 0,daveScale,daveScale,0,0)
     for x = 0 , width/(wallScale*wallWidth) do
         love.graphics.draw(wall,x*wallScale*wallWidth,0,0,wallScale,wallScale,0,0)
