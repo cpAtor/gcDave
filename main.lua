@@ -10,8 +10,18 @@ function love.load()
     wallWidth = wall:getWidth()
     wallHeight = wall:getHeight()
     wallScale = 2
+    daveRight = love.graphics.newImage("images/dave1.png")
+    daveLeft = love.graphics.newImage("images/dave5.png")
+    daveRightJump = love.graphics.newImage("images/dave4.png")
+    daveLeftJump = love.graphics.newImage("images/dave7.png")
+    daveRightWalk = love.graphics.newImage("images/dave3.png")
+    daveLeftWalk = love.graphics.newImage("images/dave6.png")
 
-    davePic = love.graphics.newImage("images/dave1.png")
+    davePic = daveRight
+    face = "right"
+    l=0
+    r=0
+    onGround = true
     daveScale = 2
     daveWidth = davePic:getWidth()*daveScale
     daveHeight = davePic:getHeight()*daveScale
@@ -46,17 +56,54 @@ function love.load()
 end
 function love.update(dt)
     world:update(dt)
-    if love.keyboard.isDown("up") then
-        x, y = daveCollider.b:getLinearVelocity( )
-        if y==0 then
-            daveCollider.b:applyForce(0,-99000)
-        end
-    end
     if love.keyboard.isDown("right") then
+        face = "right"
+        if onGround then
+            if davePic == daveRightWalk then
+                if r<5 then r=r+1
+                else
+                   r=0
+                    davePic = daveRight
+                end
+            elseif davePic == daveRight then
+                if r<5 then r=r+1
+                else
+                    r=0
+                    davePic = daveRightWalk
+                end
+            else
+                davePic = daveRight 
+            end
+        else
+            davePic = daveRightJump
+        end
         daveCollider.b:setX(daveCollider.b:getX()+velocity*dt)
     end
     if love.keyboard.isDown("left") then
+        face = "left"
+        if onGround then
+            if l<5 then l=l+1
+            else
+                l=0
+                if davePic == daveLeftWalk then
+                    davePic = daveLeft
+                else
+                    davePic = daveLeftWalk
+                end
+            end
+        else
+            davePic = daveLeftJump
+        end
         daveCollider.b:setX(daveCollider.b:getX()-velocity*dt)
+    end
+    if love.keyboard.isDown("up") then
+        if onGround then
+            daveCollider.b:applyForce(0,-50000)
+        end
+    end
+    if face == "right" then
+    else
+        
     end
 end
 function love.draw()
@@ -72,8 +119,26 @@ function love.draw()
 
 end
 function beginContact(a, b, coll)
+    if (a==daveCollider.f and b == baseCollider.f) or (b==daveCollider.f and a == baseCollider.f) then
+        print("on ground")
+        onGround = true
+        if(face == "right")then
+            davePic = daveRight
+        else
+            davePic = daveLeft
+        end
+    end
 end
 function endContact(a, b, coll)
+    if (a==daveCollider.f and b == baseCollider.f) or (b==daveCollider.f and a == baseCollider.f) then
+        print("in air")
+        onGround = false
+        if(face == "right")then
+            davePic = daveRightJump
+        else
+            davePic = daveLeftJump
+        end
+    end
 end
 function preSolve(a, b, coll)
 end
