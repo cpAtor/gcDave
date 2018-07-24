@@ -16,7 +16,7 @@
 --         love.graphics.draw(wall,width-wallScale*wallWidth,x*wallHeight*wallScale,0,wallScale,wallScale,0,0)
 --     end
 -- end
-
+--hello
 function love.load()
     world = love.physics.newWorld(0, 200, true)
         world:setCallbacks(beginContact, endContact, preSolve, postSolve)
