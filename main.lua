@@ -16,16 +16,26 @@ function love.load()
     daveWidth = davePic:getWidth()*daveScale
     daveHeight = davePic:getHeight()*daveScale
 
-    static = {}
-        static.b = love.physics.newBody(world, width/2,height-wallHeight*wallScale/2, "static")
-        static.s = love.physics.newRectangleShape(width,wallHeight*wallScale)
-        static.f = love.physics.newFixture(static.b, static.s)
-        static.f:setUserData("Block")
-    box = {}
-        box.b = love.physics.newBody(world, width/2,height-wallHeight*wallScale/2, "static")
-        box.s = love.physics.newRectangleShape(width,wallHeight*wallScale)
-        box.f = love.physics.newFixture(static.b, static.s)
-        box.f:setUserData("Block")
+    baseCollider = {}
+        baseCollider.b = love.physics.newBody(world, width/2,height-wallHeight*wallScale/2, "static")
+        baseCollider.s = love.physics.newRectangleShape(width,wallHeight*wallScale)
+        baseCollider.f = love.physics.newFixture(baseCollider.b, baseCollider.s)
+        baseCollider.f:setUserData("Block")
+    topCollider = {}
+        topCollider.b = love.physics.newBody(world, width/2,wallHeight*wallScale/2, "static")
+        topCollider.s = love.physics.newRectangleShape(width,wallHeight*wallScale)
+        topCollider.f = love.physics.newFixture(topCollider.b, topCollider.s)
+        topCollider.f:setUserData("Block")
+    leftCollider = {}
+        leftCollider.b = love.physics.newBody(world, wallScale*wallWidth/2,height/2, "static")
+        leftCollider.s = love.physics.newRectangleShape(wallWidth*wallScale,height)
+        leftCollider.f = love.physics.newFixture(leftCollider.b, leftCollider.s)
+        leftCollider.f:setUserData("Block")
+    rightCollider = {}
+        rightCollider.b = love.physics.newBody(world, width - wallScale*wallWidth/2,height/2, "static")
+        rightCollider.s = love.physics.newRectangleShape(wallWidth*wallScale,height)
+        rightCollider.f = love.physics.newFixture(rightCollider.b, rightCollider.s)
+        rightCollider.f:setUserData("Block")
     daveCollider = {}
         daveCollider.b = love.physics.newBody(world, 400,500, "dynamic")
         daveCollider.b:setMass(10)
@@ -88,7 +98,11 @@ function love.draw()
         love.graphics.draw(wall,0,x*wallHeight*wallScale,0,wallScale,wallScale,0,0)
         love.graphics.draw(wall,width-wallScale*wallWidth,x*wallHeight*wallScale,0,wallScale,wallScale,0,0)
     end
-    love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
+    love.graphics.polygon("line", baseCollider.b:getWorldPoints(baseCollider.s:getPoints()))
+    love.graphics.polygon("line", topCollider.b:getWorldPoints(topCollider.s:getPoints()))
+    love.graphics.polygon("line", leftCollider.b:getWorldPoints(leftCollider.s:getPoints()))
+    love.graphics.polygon("line", topCollider.b:getWorldPoints(topCollider.s:getPoints()))
+
 end
 function beginContact(a, b, coll)
 end
