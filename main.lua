@@ -44,49 +44,21 @@ function love.load()
         daveCollider.f:setRestitution(0)    -- make it bouncy
         daveCollider.f:setUserData("Dave")
 end
-up =false
-right = false
-left = false
 function love.update(dt)
     world:update(dt)
-    if up==true then
-    	if touch == 1 then
-    		touch = 0
-        	daveCollider.b:applyForce(0,-51000)
+    if love.keyboard.isDown("up") then
+        x, y = daveCollider.b:getLinearVelocity( )
+        if y==0 then
+            daveCollider.b:applyForce(0,-99000)
         end
     end
-    if right==true then
+    if love.keyboard.isDown("right") then
         daveCollider.b:setX(daveCollider.b:getX()+velocity*dt)
     end
-    if left==true then
+    if love.keyboard.isDown("left") then
         daveCollider.b:setX(daveCollider.b:getX()-velocity*dt)
     end
 end
-
-function love.keypressed( key )
-   if key == "up" then
-      up = true
-   end
-   if key == "right" then
-      right = true
-   end
-   if key == "left" then
-      left = true
-   end
-end
-
-function love.keyreleased( key )
-      if key == "up" then
-      up = false
-   end
-   if key == "right" then
-      right = false
-   end
-   if key == "left" then
-      left = false
-   end
-end
-
 function love.draw()
     --love.graphics.polygon("line", daveCollider.b:getWorldPoints(daveCollider.s:getPoints()))
     love.graphics.draw(davePic, daveCollider.b:getX()-daveWidth/2,daveCollider.b:getY()-daveHeight/2, 0,daveScale,daveScale,0,0)
@@ -98,10 +70,6 @@ function love.draw()
         love.graphics.draw(wall,0,x*wallHeight*wallScale,0,wallScale,wallScale,0,0)
         love.graphics.draw(wall,width-wallScale*wallWidth,x*wallHeight*wallScale,0,wallScale,wallScale,0,0)
     end
-    love.graphics.polygon("line", baseCollider.b:getWorldPoints(baseCollider.s:getPoints()))
-    love.graphics.polygon("line", topCollider.b:getWorldPoints(topCollider.s:getPoints()))
-    love.graphics.polygon("line", leftCollider.b:getWorldPoints(leftCollider.s:getPoints()))
-    love.graphics.polygon("line", topCollider.b:getWorldPoints(topCollider.s:getPoints()))
 
 end
 function beginContact(a, b, coll)
@@ -111,5 +79,4 @@ end
 function preSolve(a, b, coll)
 end
 function postSolve(a, b, coll, normalimpulse, tangentimpulse)
-	touch =1
 end
